@@ -16,22 +16,35 @@ function load_julia_file(filename::String)
     lines = open(filename) do f
         readlines(f)
     end
+    ast = Meta.parse("begin " * join(lines, "\n") * " end")
 
-    seps = findall(l -> startswith(l, "#---"), lines)
-    seps = [0, seps..., length(lines) + 1]
+    seps = map(n -> n.line, filter(a -> isa(a, LineNumberNode), ast.args))
+    seps = [seps..., length(lines)+1]
     n_blocks = length(seps) - 1
 
     function load_block(i::Int)
-        code_str = join(lines[seps[i]+1:seps[i+1]-1], "\n")
+        code_str = join(lines[seps[i]:seps[i+1]-1], "\n")
         try
             ast = Meta.parse(code_str)
             is_markdown_node(ast) && return ast
         catch _
         end
-        return string(strip(code_str))
+        return string(code_str)
     end
 
-    return Page(filename, map(load_block, 1:n_blocks), join(lines, "\n"))
+    new_blocks = []
+    for b in map(load_block, 1:n_blocks)
+        if (isempty(new_blocks) || isa(b, Expr) || isa(last(new_blocks), Expr))
+            push!(new_blocks, b)
+        else
+            new_blocks[end] *= "\n$(b)"
+        end
+    end
+
+    trim(e::Expr) = e
+    trim(s::String) = string(strip(s))
+
+    return Page(filename, trim.(new_blocks), join(lines, "\n"))
 end
 
 
@@ -46,6 +59,7 @@ function make_parser()
     enable!(parser, DollarMathRule())
     enable!(parser, AttributeRule())
     enable!(parser, AutoIdentifierRule())
+    enable!(parser, TableRule())
     return parser
 end
 
@@ -64,12 +78,5 @@ function as_html(p::Page)
     ast = parser(md_page)
 
     return html(ast)
-end
-
-
-purge_line_numbers!(e::Any) = e
-function purge_line_numbers!(expr::Expr)
-    expr.args = [purge_line_numbers!(a) for a in expr.args if !isa(a, LineNumberNode)]
-    return expr
 end
 

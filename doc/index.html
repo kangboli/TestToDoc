@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/sunburst.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
+
+<script>hljs.highlightAll();</script>
+<style>
+    body {
+    background-color: rgb(15, 15, 15);
+    color: rgb(240, 240, 240);
+    font-size: 12pt;
+    font-family: "Geist", sans-serif;
+    margin: 0;
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
+}
+
+p {
+    padding: 0px 8px;
+}
+
+pre div button {
+    display: block;
+    background-color: rgb(70, 70, 70);
+    border: none;
+    color: rgb(210, 210, 210);
+}
+
+pre div button:hover {
+  background-color: rgb(214, 0, 28);
+  color: white;
+}
+
+pre div button:active {
+    /* border: 1px solid rgb(75, 210, 210); */
+    background-color: white;
+    color: black;
+}
+
+
+pre div {
+    width: 100%;
+    display: flex;
+    justify-content:space-between;
+    border-top: 1px solid rgb(110, 110, 110);
+}
+
+pre p {
+    font-size: 0.6em;
+    margin: 0px;
+}
+
+pre {
+    /* border-radius: 4px; */
+    border: 1px solid rgb(120, 120, 120);
+    margin-left: 8px;
+}
+
+pre code.hljs {
+    padding: 0.4em;
+    font-size: 12pt;
+    font-family: "Geist Mono", monospace;
+    scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
+}
+
+.page {
+    font-size: 2em;
+    font-family: "Geist Mono", monospace;
+    padding: 2px 8px;
+}
+
+.page:hover {
+    color: rgb(214, 0, 28);
+}
+
+h2,
+h3 {
+    font-size: 1.0em;
+    font-weight: normal;
+    /*text-decoration: underline;*/
+    background-color: rgb(50, 50, 50);
+    /* border-left: 2px solid rgb(220,220,220); */
+    padding: 2px 8px;
+}
+
+.toc {
+    height: 100%;
+    flex: 1 0 160px;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    background-color: rgb(30, 30, 30);
+    /* border-right: 4px solid rgb(50,50,50); */
+}
+
+.toggler {
+    height: 100%;
+    width: 8px;
+    background-color: rgb(50,50,50);
+}
+
+.toggler:hover {
+    background-color: rgb(80,80,80);
+}
+
+.main {
+    margin-left: 8px;
+    overflow-y: auto;
+}
+
+.toc a, .toc details summary {
+    padding: 2px 6px;
+    font-family: "Geist Mono", monospace;
+    font-size: 20px;
+    color: rgb(190, 190, 190);
+    border-bottom: 2px solid rgb(60,60,60);
+}
+
+.toc a {
+    text-decoration: none;
+    display: block;
+}
+
+.toc a:nth-child(even) {
+    /* border-right: 2px solid rgb(21, 180, 210); */
+}
+
+.toc a:hover, .toc details summary:hover {
+    color: rgb(240, 240, 240);
+    background-color: rgb(214, 0, 24);
+    border-bottom: 2px solid rgb(214, 0, 28);
+}
+
+.toc a:active, .toc details summary:active {
+    /* border: 2px dotted rgb(200, 200, 200); */
+    background-color: white;
+    color: black;
+}
+
+</style>
+<script>
+function clip() {
+    let blocks = document.querySelectorAll("pre:has(code)");
+    blocks.forEach((block) => {
+      let button = block.querySelector("div button");
+
+      // handle click event
+      button.addEventListener("click", async () => {
+        await copyCode(block);
+      });
+    });
+}
+
+async function copyCode(block) {
+  let code = block.querySelector("code");
+  let text = code.innerText;
+
+  await navigator.clipboard.writeText(text);
+}
+
+function toggle_sidebar() {
+  var x = document.getElementById("sidebar");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+</head>
+    <body onload="clip();">
+    <div id="sidebar" class="toc">
+    <image style="margin: 10px 20px;"
+    width="120px" src="/assets/logo.png">
+    </image>
+     
+<a href="#quickstart.jl">quickstart</a>
+<details>
+                <summary>design</summary>
+                
+<a href="#design-theme.jl">theme</a>
+</details>
+    </div>
+    <div class="toggler"
+    onclick="toggle_sidebar()"></div>
+    <div class="main">
+<details class="title" style="margin: 1em 0em">
+<summary class="page"><span id="quickstart.jl">Quickstart</span></summary>
+<pre><code class="language-julia">md"""
+## Motivation
+
+`TestToDoc.jl` generates documentation from tests without running them.
+It helps you build userguides that is easy to read and navigate
+from tests without invading the test system.
+
+## Alternatives
+
+1. Pluto.jl:
+    1. great for tutorials.
+    2. evaluation rules too strict for tests.
+    3. hard to navigate many notebooks in html form.
+2. Documenter.jl:
+    1. easy to navigate and search.
+    2. `doctests` are hard to debug, profile, or selectively run.
+    3. no live preview.
+
+## Usage
+
+Make a list of tests that are to be converted to userguides.
+Use `watch` to live preview the files.
+"""
+using DocToTests
+
+filepaths = [
+    "test/quickstart.jl",
+    "test/design/theme.jl"
+]
+
+watch!(filepaths, "./test")
+
+md"""
+The order in which these files are passed 
+determines the order they show up the this page.
+
+## Syntax
+
+You can write markdown blocks
+```julia
+md"
+text/math goes here
+"
+```
+It  will just parsed with `CommonMark.jl` and converted to html.
+Julia code will be converted to code blocks.
+
+## Structure
+
+The structure of this page will mirror the file system structure 
+of the tests. The tests of this package is organized as 
+```txt
+test
+├── design
+│   └── theme.jl
+├── quickstart.jl
+└── runtests.jl
+```
+"""
+
+</code><div><p></p><button>copy</button></div></pre></details>
+
+<h2 id="motivation"><a href="#motivation" class="anchor"></a>Motivation</h2>
+<p><code>TestToDoc.jl</code> generates documentation from tests without running them.
+It helps you build userguides that is easy to read and navigate
+from tests without invading the test system.</p>
+<h2 id="alternatives"><a href="#alternatives" class="anchor"></a>Alternatives</h2>
+<ol>
+<li>Pluto.jl:
+<ol>
+<li>great for tutorials.</li>
+<li>evaluation rules too strict for tests.</li>
+<li>hard to navigate many notebooks in html form.</li>
+</ol>
+</li>
+<li>Documenter.jl:
+<ol>
+<li>easy to navigate and search.</li>
+<li><code>doctests</code> are hard to debug, profile, or selectively run.</li>
+<li>no live preview.</li>
+</ol>
+</li>
+</ol>
+<h2 id="usage"><a href="#usage" class="anchor"></a>Usage</h2>
+<p>Make a list of tests that are to be converted to userguides.
+Use <code>watch</code> to live preview the files.</p>
+<pre><code class="language-julia">using DocToTests
+
+filepaths = [
+    "test/quickstart.jl",
+    "test/design/theme.jl"
+]
+
+watch!(filepaths, "./test")</code><div><p></p><button>copy</button></div></pre>
+<p>The order in which these files are passed
+determines the order they show up the this page.</p>
+<h2 id="syntax"><a href="#syntax" class="anchor"></a>Syntax</h2>
+<p>You can write markdown blocks</p>
+<pre><code class="language-julia">md&quot;
+text/math goes here
+&quot;
+</code></pre>
+<p>It  will just parsed with <code>CommonMark.jl</code> and converted to html.
+Julia code will be converted to code blocks.</p>
+<h2 id="structure"><a href="#structure" class="anchor"></a>Structure</h2>
+<p>The structure of this page will mirror the file system structure
+of the tests. The tests of this package is organized as</p>
+<pre><code class="language-txt">test
+├── design
+│   └── theme.jl
+├── quickstart.jl
+└── runtests.jl
+</code></pre>
+<details class="title" style="margin: 1em 0em">
+<summary class="page"><span id="design-theme.jl">Design/theme</span></summary>
+<pre><code class="language-julia">
+md"""
+You can customize the theme by overwriting `TestToDoc.page_css()`.
+For example, 
+
+"""
+
+function TestToDoc.page_css()
+    return """
+    p {
+        color: white;
+    }
+    """
+end</code><div><p></p><button>copy</button></div></pre></details>
+
+<p>You can customize the theme by overwriting <code>TestToDoc.page_css()</code>.
+For example,</p>
+<pre><code class="language-julia">function TestToDoc.page_css()
+    return """
+    p {
+        color: white;
+    }
+    """
+end</code><div><p></p><button>copy</button></div></pre>
+
+    </div>
+</body>
+
+</html>
+    

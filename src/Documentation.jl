@@ -29,15 +29,45 @@ function as_html(d::Documentation)
 
 
     content = join(["""
-        <details style="margin: 1em 0em">
-        <summary><span class="page" id="$(get_id(t))">$(
-        uppercasefirst(t[1:end-3])
+        <details class="title" style="margin: 1em 0em">
+        <summary class="page"><span id="$(get_id(t))">$(
+        replace(uppercasefirst(t[1:end-3]), "_"=>" ")
     )</span></summary>
         <pre><code class="language-julia">$(s)</code><div><p></p><button>copy</button></div></pre></details>
-        \n$(h)""" for (t,s, h) in zip(titles, sources, htmls)])
+        \n$(h)""" for (t, s, h) in zip(titles, sources, htmls)])
     #= content = join(["<h1>$(get_name(p))</h1>\n$(as_html(p))"
         for [ in get_pages(d)], "\n") =#
-    toc = ["""<a href="#$(get_id(t))">$(t[1:end-3])</a>""" for t in titles]
+
+    toc_str = " "
+    curr_dir = nothing
+    for t in titles
+        comps = split(t[1:end-3], "/")
+        if length(comps) == 1
+            toc_str = """$(toc_str)\n<a href="#$(get_id(t))">$(t[1:end-3])</a>"""
+            if curr_dir !== nothing
+                toc_str = "$(toc_str)\n</details>"
+                curr_dir = nothing
+            end
+        else
+            dir_name, filename = comps
+            if dir_name != curr_dir
+                if curr_dir !== nothing
+                    toc_str = "$(toc_str)\n</details>"
+                end
+                toc_str = "$(toc_str)\n<details>
+                <summary>$(dir_name)</summary>
+                "
+                curr_dir = dir_name
+            end
+            toc_str = """$(toc_str)\n<a href="#$(get_id(t))">$(filename)</a>"""
+        end
+    end
+
+    if curr_dir !== nothing
+        toc_str = "$(toc_str)\n</details>"
+    end
+
+    #= toc = ["""<a href="#$(get_id(t))">$(t[1:end-3])</a>""" for t in titles] =#
 
     return """
 <!DOCTYPE html>
@@ -80,15 +110,26 @@ async function copyCode(block) {
 
   await navigator.clipboard.writeText(text);
 }
+
+function toggle_sidebar() {
+  var x = document.getElementById("sidebar");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
 </script>
 </head>
     <body onload="clip();">
-    <div class="toc">
+    <div id="sidebar" class="toc">
     <image style="margin: 10px 20px;"
     width="120px" src="/assets/logo.png">
     </image>
-    $(join(toc, "\n"))
+    $(toc_str)
     </div>
+    <div class="toggler"
+    onclick="toggle_sidebar()"></div>
     <div class="main">
 $(content)
     </div>

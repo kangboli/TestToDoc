@@ -1,9 +1,12 @@
 body {
     background-color: rgb(15, 15, 15);
     color: rgb(240, 240, 240);
-    font-size: 14pt;
+    font-size: 12pt;
     font-family: "Geist", sans-serif;
-    margin: 1.2em;
+    margin: 0;
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
 }
 
 p {
@@ -44,7 +47,7 @@ pre p {
 pre {
     /* border-radius: 4px; */
     border: 1px solid rgb(120, 120, 120);
-    margin-block: 0em;
+    margin-left: 8px;
 }
 
 pre code.hljs {
@@ -57,15 +60,11 @@ pre code.hljs {
 .page {
     font-size: 2em;
     font-family: "Geist Mono", monospace;
+    padding: 2px 8px;
 }
 
 .page:hover {
-    text-shadow: 2px 2px 0px rgb(214, 0, 28);
-}
-
-summary::marker{
-    /* content: ""; */
-    font-size: 2em;
+    color: rgb(214, 0, 28);
 }
 
 h2,
@@ -80,41 +79,56 @@ h3 {
 
 .toc {
     height: 100%;
-    width: 160px;
-    position: fixed;
+    flex: 1 0 160px;
     z-index: 1;
     top: 0;
     left: 0;
-    overflow-x: hidden;
     padding-top: 20px;
     background-color: rgb(30, 30, 30);
-    border-right: 4px solid rgb(50,50,50);
+    /* border-right: 4px solid rgb(50,50,50); */
+}
+
+.toggler {
+    height: 100%;
+    width: 8px;
+    background-color: rgb(50,50,50);
+}
+
+.toggler:hover {
+    background-color: rgb(80,80,80);
 }
 
 .main {
-    margin-left: 160px;
+    margin-left: 8px;
+    overflow-y: auto;
+}
+
+.toc a, .toc details summary {
+    padding: 2px 6px;
+    font-family: "Geist Mono", monospace;
+    font-size: 20px;
+    color: rgb(190, 190, 190);
+    border-bottom: 2px solid rgb(60,60,60);
 }
 
 .toc a {
-    padding: 6px 8px 6px 16px;
-    font-family: "Geist Mono", monospace;
     text-decoration: none;
-    font-size: 20px;
-    color: rgb(190, 190, 190);
     display: block;
-    border-bottom: 2px solid rgb(60,60,60);
 }
 
 .toc a:nth-child(even) {
     /* border-right: 2px solid rgb(21, 180, 210); */
 }
 
-.toc a:hover {
+.toc a:hover, .toc details summary:hover {
     color: rgb(240, 240, 240);
     background-color: rgb(214, 0, 24);
+    border-bottom: 2px solid rgb(214, 0, 28);
 }
 
-.toc a:active {
+.toc a:active, .toc details summary:active {
     /* border: 2px dotted rgb(200, 200, 200); */
-    text-shadow: 2px 2px 2px rgb(200, 200, 200);
+    background-color: white;
+    color: black;
 }
+
