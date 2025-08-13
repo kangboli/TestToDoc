@@ -119,14 +119,16 @@ function toggle_sidebar() {
 </script>
 </head>
     <body onload="clip();">
-    <div id="sidebar" class="toc">
+    <aside id="sidebar" class="toc">
+    <div class="toccontainer">
     <image style="margin: 10px 20px;"
     width="120px" src="./assets/logo.png">
     </image>
     <div class="pkgname">$(title)</div>
     $(toc_str)
     </div>
-    <div class="toggler" onclick="toggle_sidebar();"></div>
+    </aside>
+    <div class="toggler" onclick="toggle_sidebar();">-</div>
     <div class="main">
     <div class="content">
     $(content)

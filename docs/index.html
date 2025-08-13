@@ -24,9 +24,44 @@
     font-family: "Geist", sans-serif;
     margin: 0;
     display: flex;
-    overflow: hidden;
-    height: 100vh;
 }
+
+
+.toc {
+    flex: 1;
+    background-color: rgb(30, 30, 30);
+}
+
+.toccontainer {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow: auto;
+    scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
+}
+
+.toggler {
+    width: 8px;
+    color: rgb(50, 50, 50);
+    background-color: rgb(50, 50, 50);
+}
+
+.toggler:hover {
+    background-color: rgb(80, 80, 80);
+}
+
+.main {
+    flex: 4;
+    margin-top: 2em;
+    scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
+}
+
+.content {
+    max-width: 80em;
+    min-width: 40em;
+    margin: auto;
+}
+
 
 p {
     padding: 0px 8px;
@@ -101,39 +136,6 @@ h3 {
     border-bottom: 1px solid rgb(120, 120, 120);
 }
 
-.toc {
-    height: 100%;
-    flex: 1;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    padding: 20px 10px;
-    background-color: rgb(30, 30, 30);
-    /* border-right: 4px solid rgb(50,50,50); */
-}
-
-.toggler {
-    height: 100%;
-    width: 8px;
-    background-color: rgb(50, 50, 50);
-}
-
-.toggler:hover {
-    background-color: rgb(80, 80, 80);
-}
-
-.main {
-    flex: 4;
-    margin-top: 2em;
-    overflow-y: auto;
-    scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
-}
-
-.content {
-    width: 80em;
-    margin: auto;
-}
-
 .toc a,
 .toc details summary {
     padding: 2px 6px;
@@ -149,10 +151,6 @@ h3 {
 .toc a {
     text-decoration: none;
     display: block;
-}
-
-.toc a:nth-child(even) {
-    /* border-right: 2px solid rgb(21, 180, 210); */
 }
 
 .toc a:hover,
@@ -218,7 +216,8 @@ function toggle_sidebar() {
 </script>
 </head>
     <body onload="clip();">
-    <div id="sidebar" class="toc">
+    <aside id="sidebar" class="toc">
+    <div class="toccontainer">
     <image style="margin: 10px 20px;"
     width="120px" src="./assets/logo.png">
     </image>
@@ -233,7 +232,8 @@ function toggle_sidebar() {
 <a href="#design-dependencies.jl">dependencies</a>
 </details>
     </div>
-    <div class="toggler" onclick="toggle_sidebar();"></div>
+    </aside>
+    <div class="toggler" onclick="toggle_sidebar();">-</div>
     <div class="main">
     <div class="content">
     <details class="title" style="margin: 1em 0em">
