@@ -140,13 +140,13 @@ $(content)
 end
 
 
-function gen_doc!(filepaths::Vector{String}, dst="./doc")
+function gen_doc!(filepaths::Vector{String}, dst="./docs")
     out = open("$(dst)/index.html", "w")
     write(out, as_html(load_files(filepaths)))
     close(out)
 end
 
-function watch!(filepaths::Vector{String}, src="./test", dst="./doc")
+function watch!(filepaths::Vector{String}, src="./test", dst="./docs")
     gen_doc!(filepaths, dst)
     try
         @sync begin
