@@ -5,10 +5,12 @@ using CommonMark
 struct Page
     name::String
     nodes::Vector
+    source::String
 end
 
 get_name(p::Page) = p.name
 get_nodes(p::Page) = p.nodes
+get_source(p::Page) = p.source
 
 function load_julia_file(filename::String)
     lines = open(filename) do f
@@ -26,10 +28,10 @@ function load_julia_file(filename::String)
             is_markdown_node(ast) && return ast
         catch _
         end
-        return code_str
+        return string(strip(code_str))
     end
 
-    return Page(filename, map(load_block, 1:n_blocks))
+    return Page(filename, map(load_block, 1:n_blocks), join(lines, "\n"))
 end
 
 
@@ -47,7 +49,9 @@ function make_parser()
     return parser
 end
 
-to_md_string(node::String) = """<pre><code class="language-julia">$(node)</code></pre>"""
+to_md_string(node::String) = """
+    <pre><code class="language-julia">$(node)</code><div><p></p><button>copy</button></div></pre>
+    """
 function to_md_string(node::Expr)
     return first(filter(t -> isa(t, String), node.args))
 end
@@ -68,3 +72,4 @@ function purge_line_numbers!(expr::Expr)
     expr.args = [purge_line_numbers!(a) for a in expr.args if !isa(a, LineNumberNode)]
     return expr
 end
+
