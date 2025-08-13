@@ -124,7 +124,7 @@ function toggle_sidebar() {
     <body onload="clip();">
     <div id="sidebar" class="toc">
     <image style="margin: 10px 20px;"
-    width="120px" src="/assets/logo.png">
+    width="120px" src="./assets/logo.png">
     </image>
     $(toc_str)
     </div>
