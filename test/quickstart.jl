@@ -1,20 +1,4 @@
 md"""
-## Motivation
-
-`TestToDoc.jl` generates documentation from tests without running them.
-It helps you build userguides that is easy to read and navigate
-from tests without invading the test system.
-
-## Alternatives
-
-1. Pluto.jl:
-    1. great for tutorials.
-    2. evaluation rules too strict for tests.
-    3. hard to navigate many notebooks in html form.
-2. Documenter.jl:
-    1. easy to navigate and search.
-    2. `doctests` are hard to debug, profile, or selectively run.
-    3. no live preview.
 
 ## Usage
 
@@ -31,7 +15,7 @@ filepaths = [
 watch!(filepaths, "./test")
 
 md"""
-The order in which these files are passed 
+The order in which these files are passed
 determines the order they show up the this page.
 
 ## Syntax
@@ -45,10 +29,20 @@ text/math goes here
 It  will just parsed with `CommonMark.jl` and converted to html.
 Julia code will be converted to code blocks.
 
+Math is supported by `KaTeX`. For example
+
+$$
+\begin{equation}
+i \hbar \frac{d}{dt} \Psi = H \Psi
+\end{equation}
+$$
+
+`Copy-tex` is enabled so copying it puts the tex code in your clipboard.
+
 ## Structure
 
-The structure of this page will mirror the file system structure 
-of the tests. The tests of this package is organized as 
+The structure of this page will mirror the file system structure
+of the tests. The tests of this package is organized as
 ```txt
 test
 ├── design
@@ -57,5 +51,3 @@ test
 └── runtests.jl
 ```
 """
-
-

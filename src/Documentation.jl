@@ -21,12 +21,11 @@ function page_css()
     return css
 end
 
-function as_html(d::Documentation)
+function as_html(d::Documentation, title)
     titles = map(t -> join(split(get_name(t), "/")[2:end], "/"), get_pages(d))
     htmls = map(as_html, get_pages(d))
     sources = map(get_source, get_pages(d))
     get_id(title::String) = replace(title, '/' => '-')
-
 
     content = join(["""
         <details class="title" style="margin: 1em 0em">
@@ -35,10 +34,8 @@ function as_html(d::Documentation)
     )</span></summary>
         <pre><code class="language-julia">$(s)</code><div><p></p><button>copy</button></div></pre></details>
         \n$(h)""" for (t, s, h) in zip(titles, sources, htmls)])
-    #= content = join(["<h1>$(get_name(p))</h1>\n$(as_html(p))"
-        for [ in get_pages(d)], "\n") =#
 
-    toc_str = " "
+    toc_str = ""
     curr_dir = nothing
     for t in titles
         comps = split(t[1:end-3], "/")
@@ -86,24 +83,12 @@ function as_html(d::Documentation)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/copy-tex.min.js" integrity="sha384-HORx6nWi8j5/mYA+y57/9/CZc5z8HnEw4WUZWy5yOn9ToKBv1l58vJaufFAn9Zzi" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 <style>
     $(page_css())
 </style>
 <script>
-function clip() {
-    let blocks = document.querySelectorAll("pre:has(code)");
-    blocks.forEach((block) => {
-      let button = block.querySelector("div button");
-
-      // handle click event
-      button.addEventListener("click", async () => {
-        await copyCode(block);
-      });
-    });
-}
-
 async function copyCode(block) {
   let code = block.querySelector("code");
   let text = code.innerText;
@@ -111,6 +96,18 @@ async function copyCode(block) {
   await navigator.clipboard.writeText(text);
 }
 
+function clip() {
+    let blocks = document.querySelectorAll("pre:has(code)");
+    blocks.forEach((block) => {
+      let button = block.querySelector("div button");
+          if (button){
+              button.addEventListener("click", async () => {
+            await copyCode(block);
+          });
+
+              }
+    });
+}
 function toggle_sidebar() {
   var x = document.getElementById("sidebar");
   if (x.style.display === "none") {
@@ -126,12 +123,14 @@ function toggle_sidebar() {
     <image style="margin: 10px 20px;"
     width="120px" src="./assets/logo.png">
     </image>
+    <div class="pkgname">$(title)</div>
     $(toc_str)
     </div>
-    <div class="toggler"
-    onclick="toggle_sidebar()"></div>
+    <div class="toggler" onclick="toggle_sidebar();"></div>
     <div class="main">
-$(content)
+    <div class="content">
+    $(content)
+    </div>
     </div>
 </body>
 
@@ -140,18 +139,18 @@ $(content)
 end
 
 
-function gen_doc!(filepaths::Vector{String}, dst="./docs")
+function gen_doc!(filepaths::Vector{String}, dst="./docs", title=last(splitdir(pwd())))
     out = open("$(dst)/index.html", "w")
-    write(out, as_html(load_files(filepaths)))
+    write(out, as_html(load_files(filepaths), title))
     close(out)
 end
 
-function watch!(filepaths::Vector{String}, src="./test", dst="./docs")
-    gen_doc!(filepaths, dst)
+function watch!(filepaths::Vector{String}, src="./test", dst="./docs", title=last(splitdir(pwd())))
+    gen_doc!(filepaths, dst, title)
     try
         @sync begin
             Threads.@spawn while true
-                watch_folder((event) -> gen_doc!(filepaths, dst), src)
+                watch_folder((event) -> gen_doc!(filepaths, dst, title), src)
             end
             Threads.@spawn serve(dir=dst, port=8080)
             println("http://localhost:8080/index.html")
@@ -161,4 +160,3 @@ function watch!(filepaths::Vector{String}, src="./test", dst="./docs")
         return
     end
 end
-

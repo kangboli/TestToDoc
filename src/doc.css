@@ -17,12 +17,13 @@ pre div button {
     display: block;
     background-color: rgb(70, 70, 70);
     border: none;
+    font-size: 1em;
     color: rgb(210, 210, 210);
 }
 
 pre div button:hover {
-  background-color: rgb(214, 0, 28);
-  color: white;
+    background-color: rgb(214, 0, 28);
+    color: white;
 }
 
 pre div button:active {
@@ -31,11 +32,10 @@ pre div button:active {
     color: black;
 }
 
-
 pre div {
     width: 100%;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     border-top: 1px solid rgb(110, 110, 110);
 }
 
@@ -58,7 +58,7 @@ pre code.hljs {
 }
 
 .page {
-    font-size: 2em;
+    font-size: 1.6em;
     font-family: "Geist Mono", monospace;
     padding: 2px 8px;
 }
@@ -69,21 +69,26 @@ pre code.hljs {
 
 h2,
 h3 {
-    font-size: 1.0em;
+    font-size: 1em;
     font-weight: normal;
-    /*text-decoration: underline;*/
-    background-color: rgb(50, 50, 50);
-    /* border-left: 2px solid rgb(220,220,220); */
     padding: 2px 8px;
+}
+
+h2 {
+    background-color: rgb(50, 50, 50);
+}
+
+h3 {
+    border-bottom: 1px solid rgb(120, 120, 120);
 }
 
 .toc {
     height: 100%;
-    flex: 1 0 160px;
+    flex: 1;
     z-index: 1;
     top: 0;
     left: 0;
-    padding-top: 20px;
+    padding: 20px 10px;
     background-color: rgb(30, 30, 30);
     /* border-right: 4px solid rgb(50,50,50); */
 }
@@ -91,24 +96,35 @@ h3 {
 .toggler {
     height: 100%;
     width: 8px;
-    background-color: rgb(50,50,50);
+    background-color: rgb(50, 50, 50);
 }
 
 .toggler:hover {
-    background-color: rgb(80,80,80);
+    background-color: rgb(80, 80, 80);
 }
 
 .main {
-    margin-left: 8px;
+    flex: 4;
+    margin-top: 2em;
     overflow-y: auto;
+    scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
 }
 
-.toc a, .toc details summary {
+.content {
+    width: 80em;
+    margin: auto;
+}
+
+.toc a,
+.toc details summary {
     padding: 2px 6px;
     font-family: "Geist Mono", monospace;
     font-size: 20px;
-    color: rgb(190, 190, 190);
-    border-bottom: 2px solid rgb(60,60,60);
+    color: rgb(210, 210, 210);
+    border-bottom: 2px solid rgb(60, 60, 60);
+}
+.toc details a {
+    padding-left: 24px;
 }
 
 .toc a {
@@ -120,15 +136,34 @@ h3 {
     /* border-right: 2px solid rgb(21, 180, 210); */
 }
 
-.toc a:hover, .toc details summary:hover {
+.toc a:hover,
+.toc details summary:hover {
     color: rgb(240, 240, 240);
     background-color: rgb(214, 0, 24);
     border-bottom: 2px solid rgb(214, 0, 28);
 }
 
-.toc a:active, .toc details summary:active {
+.toc a:active,
+.toc details summary:active {
     /* border: 2px dotted rgb(200, 200, 200); */
     background-color: white;
     color: black;
 }
 
+.pkgname {
+    background-color: rgb(84, 84, 84);
+    padding: 10px 8px;
+}
+
+td,
+th {
+    margin: 0px;
+    padding: 8px;
+    border: 1px solid rgb(120, 120, 120);
+}
+
+table {
+    margin: auto;
+    border: 1px solid rgb(120, 120, 120);
+    border-collapse: collapse;
+}

@@ -5,6 +5,7 @@ equation for the Schwein analysis is
 
 ## Equations
 
+
 $$
 \begin{equation}
 BMI = \frac{weight}{height^2}
@@ -14,20 +15,17 @@ $$
 #----------
 bmi(weight, height) = weight / height^2
 
-
 Meta.parse("bmi(weight, height) = weight / height^2") |> Meta.dump
 
-#--- 
+#---
 
 
 md"""
-iHere 
-
-are 
+iHere
+are
 
 some
 
-more 
-
+more
 lines
 """

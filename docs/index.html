@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/copy-tex.min.js" integrity="sha384-HORx6nWi8j5/mYA+y57/9/CZc5z8HnEw4WUZWy5yOn9ToKBv1l58vJaufFAn9Zzi" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 <style>
     body {
@@ -36,12 +36,13 @@ pre div button {
     display: block;
     background-color: rgb(70, 70, 70);
     border: none;
+    font-size: 1em;
     color: rgb(210, 210, 210);
 }
 
 pre div button:hover {
-  background-color: rgb(214, 0, 28);
-  color: white;
+    background-color: rgb(214, 0, 28);
+    color: white;
 }
 
 pre div button:active {
@@ -50,11 +51,10 @@ pre div button:active {
     color: black;
 }
 
-
 pre div {
     width: 100%;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     border-top: 1px solid rgb(110, 110, 110);
 }
 
@@ -77,7 +77,7 @@ pre code.hljs {
 }
 
 .page {
-    font-size: 2em;
+    font-size: 1.6em;
     font-family: "Geist Mono", monospace;
     padding: 2px 8px;
 }
@@ -88,21 +88,26 @@ pre code.hljs {
 
 h2,
 h3 {
-    font-size: 1.0em;
+    font-size: 1em;
     font-weight: normal;
-    /*text-decoration: underline;*/
-    background-color: rgb(50, 50, 50);
-    /* border-left: 2px solid rgb(220,220,220); */
     padding: 2px 8px;
+}
+
+h2 {
+    background-color: rgb(50, 50, 50);
+}
+
+h3 {
+    border-bottom: 1px solid rgb(120, 120, 120);
 }
 
 .toc {
     height: 100%;
-    flex: 1 0 160px;
+    flex: 1;
     z-index: 1;
     top: 0;
     left: 0;
-    padding-top: 20px;
+    padding: 20px 10px;
     background-color: rgb(30, 30, 30);
     /* border-right: 4px solid rgb(50,50,50); */
 }
@@ -110,24 +115,35 @@ h3 {
 .toggler {
     height: 100%;
     width: 8px;
-    background-color: rgb(50,50,50);
+    background-color: rgb(50, 50, 50);
 }
 
 .toggler:hover {
-    background-color: rgb(80,80,80);
+    background-color: rgb(80, 80, 80);
 }
 
 .main {
-    margin-left: 8px;
+    flex: 4;
+    margin-top: 2em;
     overflow-y: auto;
+    scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
 }
 
-.toc a, .toc details summary {
+.content {
+    width: 80em;
+    margin: auto;
+}
+
+.toc a,
+.toc details summary {
     padding: 2px 6px;
     font-family: "Geist Mono", monospace;
     font-size: 20px;
-    color: rgb(190, 190, 190);
-    border-bottom: 2px solid rgb(60,60,60);
+    color: rgb(210, 210, 210);
+    border-bottom: 2px solid rgb(60, 60, 60);
+}
+.toc details a {
+    padding-left: 24px;
 }
 
 .toc a {
@@ -139,32 +155,39 @@ h3 {
     /* border-right: 2px solid rgb(21, 180, 210); */
 }
 
-.toc a:hover, .toc details summary:hover {
+.toc a:hover,
+.toc details summary:hover {
     color: rgb(240, 240, 240);
     background-color: rgb(214, 0, 24);
     border-bottom: 2px solid rgb(214, 0, 28);
 }
 
-.toc a:active, .toc details summary:active {
+.toc a:active,
+.toc details summary:active {
     /* border: 2px dotted rgb(200, 200, 200); */
     background-color: white;
     color: black;
 }
 
-</style>
-<script>
-function clip() {
-    let blocks = document.querySelectorAll("pre:has(code)");
-    blocks.forEach((block) => {
-      let button = block.querySelector("div button");
-
-      // handle click event
-      button.addEventListener("click", async () => {
-        await copyCode(block);
-      });
-    });
+.pkgname {
+    background-color: rgb(84, 84, 84);
+    padding: 10px 8px;
 }
 
+td,
+th {
+    margin: 0px;
+    padding: 8px;
+    border: 1px solid rgb(120, 120, 120);
+}
+
+table {
+    margin: auto;
+    border: 1px solid rgb(120, 120, 120);
+    border-collapse: collapse;
+}
+</style>
+<script>
 async function copyCode(block) {
   let code = block.querySelector("code");
   let text = code.innerText;
@@ -172,6 +195,18 @@ async function copyCode(block) {
   await navigator.clipboard.writeText(text);
 }
 
+function clip() {
+    let blocks = document.querySelectorAll("pre:has(code)");
+    blocks.forEach((block) => {
+      let button = block.querySelector("div button");
+          if (button){
+              button.addEventListener("click", async () => {
+            await copyCode(block);
+          });
+
+              }
+    });
+}
 function toggle_sidebar() {
   var x = document.getElementById("sidebar");
   if (x.style.display === "none") {
@@ -187,36 +222,64 @@ function toggle_sidebar() {
     <image style="margin: 10px 20px;"
     width="120px" src="./assets/logo.png">
     </image>
-     
+    <div class="pkgname">TestToDoc</div>
+    
+<a href="#motivation.jl">motivation</a>
 <a href="#quickstart.jl">quickstart</a>
 <details>
                 <summary>design</summary>
                 
 <a href="#design-theme.jl">theme</a>
+<a href="#design-dependencies.jl">dependencies</a>
 </details>
     </div>
-    <div class="toggler"
-    onclick="toggle_sidebar()"></div>
+    <div class="toggler" onclick="toggle_sidebar();"></div>
     <div class="main">
-<details class="title" style="margin: 1em 0em">
-<summary class="page"><span id="quickstart.jl">Quickstart</span></summary>
+    <div class="content">
+    <details class="title" style="margin: 1em 0em">
+<summary class="page"><span id="motivation.jl">Motivation</span></summary>
 <pre><code class="language-julia">md"""
-## Motivation
-
 `TestToDoc.jl` generates documentation from tests without running them.
 It helps you build userguides that is easy to read and navigate
 from tests without invading the test system.
 
-## Alternatives
+The main use case is to build a practical e-book (for computational physical
+science) from a set of self-contained tests. Compared to a traditional textbook,
+the advantages are
 
-1. Pluto.jl:
-    1. great for tutorials.
-    2. evaluation rules too strict for tests.
-    3. hard to navigate many notebooks in html form.
-2. Documenter.jl:
-    1. easy to navigate and search.
-    2. `doctests` are hard to debug, profile, or selectively run.
-    3. no live preview.
+| | e-book | paperback |
+|:--|:---|:---|
+| code | every pages is self-contained and runnable | theory to practice is almost infeasible |
+| distribution | all content reachable from search engines | only title & abstract are accessible |
+| growth | continuously updatable | immutable after publication |
+
+## Compared to Alternatives
+
+There are few other technologies that can do similar things, but they don't
+really fit the bill for our purposes.
+
+
+| | Pluto | Documenter| TestToDoc |
+|:--|:-----:|:---------:|:-----------:|
+| self-contained tutorial |  $\checkmark$    | $\times$|  $\checkmark$ |
+| navigatable documentation | $\times$ | $\checkmark$ | $\checkmark$ |
+| avoid constraining tests | $\times$ | $\times$ | $\checkmark$ |
+
+"""</code><div><p></p><button>copy</button></div></pre></details>
+
+<p><code>TestToDoc.jl</code> generates documentation from tests without running them.
+It helps you build userguides that is easy to read and navigate
+from tests without invading the test system.</p>
+<p>The main use case is to build a practical e-book (for computational physical
+science) from a set of self-contained tests. Compared to a traditional textbook,
+the advantages are</p>
+<table><thead><tr><th align="left"></th><th align="left">e-book</th><th align="left">paperback</th></tr></thead><tbody><tr><td align="left">code</td><td align="left">every pages is self-contained and runnable</td><td align="left">theory to practice is almost infeasible</td></tr><tr><td align="left">distribution</td><td align="left">all content reachable from search engines</td><td align="left">only title &amp; abstract are accessible</td></tr><tr><td align="left">growth</td><td align="left">continuously updatable</td><td align="left">immutable after publication</td></tr></tbody></table>
+<h2 id="compared-to-alternatives"><a href="#compared-to-alternatives" class="anchor"></a>Compared to Alternatives</h2>
+<p>There are few other technologies that can do similar things, but they don't
+really fit the bill for our purposes.</p>
+<table><thead><tr><th align="left"></th><th align="center">Pluto</th><th align="center">Documenter</th><th align="center">TestToDoc</th></tr></thead><tbody><tr><td align="left">self-contained tutorial</td><td align="center"><span class="math tex">\(\checkmark\)</span></td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr><tr><td align="left">navigatable documentation</td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr><tr><td align="left">avoid constraining tests</td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr></tbody></table><details class="title" style="margin: 1em 0em">
+<summary class="page"><span id="quickstart.jl">Quickstart</span></summary>
+<pre><code class="language-julia">md"""
 
 ## Usage
 
@@ -233,7 +296,7 @@ filepaths = [
 watch!(filepaths, "./test")
 
 md"""
-The order in which these files are passed 
+The order in which these files are passed
 determines the order they show up the this page.
 
 ## Syntax
@@ -247,10 +310,20 @@ text/math goes here
 It  will just parsed with `CommonMark.jl` and converted to html.
 Julia code will be converted to code blocks.
 
+Math is supported by `KaTeX`. For example
+
+$$
+\begin{equation}
+i \hbar \frac{d}{dt} \Psi = H \Psi
+\end{equation}
+$$
+
+`Copy-tex` is enabled so copying it puts the tex code in your clipboard.
+
 ## Structure
 
-The structure of this page will mirror the file system structure 
-of the tests. The tests of this package is organized as 
+The structure of this page will mirror the file system structure
+of the tests. The tests of this package is organized as
 ```txt
 test
 ├── design
@@ -258,31 +331,8 @@ test
 ├── quickstart.jl
 └── runtests.jl
 ```
-"""
+"""</code><div><p></p><button>copy</button></div></pre></details>
 
-</code><div><p></p><button>copy</button></div></pre></details>
-
-<h2 id="motivation"><a href="#motivation" class="anchor"></a>Motivation</h2>
-<p><code>TestToDoc.jl</code> generates documentation from tests without running them.
-It helps you build userguides that is easy to read and navigate
-from tests without invading the test system.</p>
-<h2 id="alternatives"><a href="#alternatives" class="anchor"></a>Alternatives</h2>
-<ol>
-<li>Pluto.jl:
-<ol>
-<li>great for tutorials.</li>
-<li>evaluation rules too strict for tests.</li>
-<li>hard to navigate many notebooks in html form.</li>
-</ol>
-</li>
-<li>Documenter.jl:
-<ol>
-<li>easy to navigate and search.</li>
-<li><code>doctests</code> are hard to debug, profile, or selectively run.</li>
-<li>no live preview.</li>
-</ol>
-</li>
-</ol>
 <h2 id="usage"><a href="#usage" class="anchor"></a>Usage</h2>
 <p>Make a list of tests that are to be converted to userguides.
 Use <code>watch</code> to live preview the files.</p>
@@ -304,6 +354,11 @@ text/math goes here
 </code></pre>
 <p>It  will just parsed with <code>CommonMark.jl</code> and converted to html.
 Julia code will be converted to code blocks.</p>
+<p>Math is supported by <code>KaTeX</code>. For example</p>
+<div class="display-math tex">\[\begin{equation}
+i \hbar \frac{d}{dt} \Psi = H \Psi
+\end{equation}\]</div>
+<p><code>Copy-tex</code> is enabled so copying it puts the tex code in your clipboard.</p>
 <h2 id="structure"><a href="#structure" class="anchor"></a>Structure</h2>
 <p>The structure of this page will mirror the file system structure
 of the tests. The tests of this package is organized as</p>
@@ -339,7 +394,37 @@ For example,</p>
     }
     """
 end</code><div><p></p><button>copy</button></div></pre>
+<details class="title" style="margin: 1em 0em">
+<summary class="page"><span id="design-dependencies.jl">Design/dependencies</span></summary>
+<pre><code class="language-julia">md"""
+To make a page self-contained, tests can include other tests.
+These includes will be expanded recursively and included
+in the source code. Click on `Design/dependencies` to
+see how it works.
+"""
 
+
+md"""
+You can customize the theme by overwriting `TestToDoc.page_css()`.
+For example, 
+
+"""
+
+function TestToDoc.page_css()
+    return """
+    p {
+        color: white;
+    }
+    """
+end</code><div><p></p><button>copy</button></div></pre></details>
+
+<p>To make a page self-contained, tests can include other tests.
+These includes will be expanded recursively and included
+in the source code. Click on <code>Design/dependencies</code> to
+see how it works.</p>
+<pre><code class="language-julia">include("theme.jl")</code><div><p></p><button>copy</button></div></pre>
+
+    </div>
     </div>
 </body>
 

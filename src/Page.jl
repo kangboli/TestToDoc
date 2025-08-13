@@ -19,7 +19,7 @@ function load_julia_file(filename::String)
     ast = Meta.parse("begin " * join(lines, "\n") * " end")
 
     seps = map(n -> n.line, filter(a -> isa(a, LineNumberNode), ast.args))
-    seps = [seps..., length(lines)+1]
+    seps = [seps..., length(lines) + 1]
     n_blocks = length(seps) - 1
 
     function load_block(i::Int)
@@ -44,7 +44,7 @@ function load_julia_file(filename::String)
     trim(e::Expr) = e
     trim(s::String) = string(strip(s))
 
-    return Page(filename, trim.(new_blocks), join(lines, "\n"))
+    return Page(filename, trim.(new_blocks), join(expand_include(lines, dirname(filename)), "\n"))
 end
 
 
@@ -80,3 +80,22 @@ function as_html(p::Page)
     return html(ast)
 end
 
+function find_include(lines, dir)
+    for (i, l) in enumerate(lines)
+        m = match(r"include\((.+)\)", l)
+        m === nothing && continue
+        file_path = eval(Meta.parse(first(m.captures)))
+        isabspath(file_path) && return (i, file_path)
+        return (i, joinpath(dir, file_path))
+    end
+    return length(lines), nothing
+end
+
+function expand_include(lines, dir)
+    line_number, file = find_include(lines, dir)
+    file === nothing && return lines
+    return expand_include(
+        [lines[1:line_number-1]...,
+            readlines(file)...,
+            lines[line_number+1:end]...], dir)
+end
