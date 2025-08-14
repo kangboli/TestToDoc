@@ -1,4 +1,10 @@
 using TestToDoc
 
-filepaths = ["test/example.jl", "test/plant/iris.jl"]
-watch!(filepaths, "./test")
+filepaths = [
+    "test/cover.jl",
+    "test/motivation.jl",
+    "test/quickstart.jl",
+    "test/design/theme.jl",
+    "test/design/dependencies.jl",
+]
+watch!(filepaths; src="./test", port=8889)

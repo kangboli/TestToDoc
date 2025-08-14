@@ -5,16 +5,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
+<script>
+MathJax = {
+  loader: {load: ['[tex]/physics']},
+
+  tex: {
+    inlineMath: {'[+]': [['$', '$']]},
+    tags: 'ams',
+    packages: {'[+]': ['physics']},
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script> 
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/sunburst.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/copy-tex.min.js" integrity="sha384-HORx6nWi8j5/mYA+y57/9/CZc5z8HnEw4WUZWy5yOn9ToKBv1l58vJaufFAn9Zzi" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 <style>
     body {
@@ -56,9 +66,18 @@
     scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
 }
 
+a {
+    text-decoration: none;
+    color: rgb(210, 210, 210);
+}
+
+a:hover {
+    color: rgb(214, 0, 28);
+}
+
 .content {
-    max-width: 80em;
-    min-width: 40em;
+    max-width: 40em;
+    min-width: 20em;
     margin: auto;
 }
 
@@ -66,6 +85,8 @@
 p {
     padding: 0px 8px;
 }
+
+
 
 pre div button {
     display: block;
@@ -94,8 +115,9 @@ pre div {
 }
 
 pre p {
-    font-size: 0.6em;
+    /* font-size: 0.6em; */
     margin: 0px;
+    color: rgb(140, 140, 140);
 }
 
 pre {
@@ -109,6 +131,7 @@ pre code.hljs {
     font-size: 12pt;
     font-family: "Geist Mono", monospace;
     scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
+    background-color: rgb(30,30,30);
 }
 
 .page {
@@ -139,17 +162,16 @@ h3 {
 .toc a,
 .toc details summary {
     padding: 2px 6px;
-    font-family: "Geist Mono", monospace;
+    font-family: "Geist", sans-serif;
     font-size: 20px;
     color: rgb(210, 210, 210);
     border-bottom: 2px solid rgb(60, 60, 60);
 }
 .toc details a {
-    padding-left: 24px;
+    padding-left: 20px;
 }
 
 .toc a {
-    text-decoration: none;
     display: block;
 }
 
@@ -183,6 +205,7 @@ table {
     margin: auto;
     border: 1px solid rgb(120, 120, 120);
     border-collapse: collapse;
+    background-color: rgb(30,30,30);
 }
 </style>
 <script>
@@ -223,6 +246,7 @@ function toggle_sidebar() {
     </image>
     <div class="pkgname">TestToDoc</div>
     
+<a href="#cover.jl">cover</a>
 <a href="#motivation.jl">motivation</a>
 <a href="#quickstart.jl">quickstart</a>
 <details>
@@ -236,9 +260,16 @@ function toggle_sidebar() {
     <div class="toggler" onclick="toggle_sidebar();">-</div>
     <div class="main">
     <div class="content">
-    <details class="title" style="margin: 1em 0em">
-<summary class="page"><span id="motivation.jl">Motivation</span></summary>
-<pre><code class="language-julia">md"""
+    <div style="
+display:flex;
+align-items: center;
+justify-content: center;
+padding-bottom: 4em;
+border-bottom: 4px solid white;
+">
+<h1 style="font-size: 2.2em"> From Tests to Documentation </h1>
+</div>
+<details class="title" style="margin: 1em 0em"><summary class="page"><span id="motivation.jl">Motivation</span></summary><pre><code class="language-julia">md"""
 `TestToDoc.jl` generates documentation from tests without running them.
 It helps you build userguides that is easy to read and navigate
 from tests without invading the test system.
@@ -264,9 +295,7 @@ really fit the bill for our purposes.
 | self-contained tutorial |  $\checkmark$    | $\times$|  $\checkmark$ |
 | navigatable documentation | $\times$ | $\checkmark$ | $\checkmark$ |
 | avoid constraining tests | $\times$ | $\times$ | $\checkmark$ |
-
 """</code><div><p></p><button>copy</button></div></pre></details>
-
 <p><code>TestToDoc.jl</code> generates documentation from tests without running them.
 It helps you build userguides that is easy to read and navigate
 from tests without invading the test system.</p>
@@ -277,9 +306,7 @@ the advantages are</p>
 <h2 id="compared-to-alternatives"><a href="#compared-to-alternatives" class="anchor"></a>Compared to Alternatives</h2>
 <p>There are few other technologies that can do similar things, but they don't
 really fit the bill for our purposes.</p>
-<table><thead><tr><th align="left"></th><th align="center">Pluto</th><th align="center">Documenter</th><th align="center">TestToDoc</th></tr></thead><tbody><tr><td align="left">self-contained tutorial</td><td align="center"><span class="math tex">\(\checkmark\)</span></td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr><tr><td align="left">navigatable documentation</td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr><tr><td align="left">avoid constraining tests</td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr></tbody></table><details class="title" style="margin: 1em 0em">
-<summary class="page"><span id="quickstart.jl">Quickstart</span></summary>
-<pre><code class="language-julia">md"""
+<table><thead><tr><th align="left"></th><th align="center">Pluto</th><th align="center">Documenter</th><th align="center">TestToDoc</th></tr></thead><tbody><tr><td align="left">self-contained tutorial</td><td align="center"><span class="math tex">\(\checkmark\)</span></td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr><tr><td align="left">navigatable documentation</td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr><tr><td align="left">avoid constraining tests</td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\times\)</span></td><td align="center"><span class="math tex">\(\checkmark\)</span></td></tr></tbody></table><details class="title" style="margin: 1em 0em"><summary class="page"><span id="quickstart.jl">Quickstart</span></summary><pre><code class="language-julia">md"""
 
 ## Usage
 
@@ -313,12 +340,12 @@ Julia code will be converted to code blocks.
 Math is supported by `KaTeX`. For example
 
 $$
-\begin{equation}
-i \hbar \frac{d}{dt} \Psi = H \Psi
+\begin{equation}\label{eqn:schrodinger}
+i \hbar \frac{d}{dt} \Psi = H \Psi 
 \end{equation}
 $$
 
-`Copy-tex` is enabled so copying it puts the tex code in your clipboard.
+`Copy-tex` is enabled so copying it puts the tex code in your clipboard. You can also reference the equations as Eq.$\ref{eqn:schrodinger}$.
 
 ## Structure
 
@@ -332,7 +359,6 @@ test
 └── runtests.jl
 ```
 """</code><div><p></p><button>copy</button></div></pre></details>
-
 <h2 id="usage"><a href="#usage" class="anchor"></a>Usage</h2>
 <p>Make a list of tests that are to be converted to userguides.
 Use <code>watch</code> to live preview the files.</p>
@@ -343,7 +369,7 @@ filepaths = [
     "test/design/theme.jl"
 ]
 
-watch!(filepaths, "./test")</code><div><p></p><button>copy</button></div></pre>
+watch!(filepaths, "./test")</code><div><p>test/quickstart.jl</p><button>copy</button></div></pre>
 <p>The order in which these files are passed
 determines the order they show up the this page.</p>
 <h2 id="syntax"><a href="#syntax" class="anchor"></a>Syntax</h2>
@@ -355,10 +381,10 @@ text/math goes here
 <p>It  will just parsed with <code>CommonMark.jl</code> and converted to html.
 Julia code will be converted to code blocks.</p>
 <p>Math is supported by <code>KaTeX</code>. For example</p>
-<div class="display-math tex">\[\begin{equation}
-i \hbar \frac{d}{dt} \Psi = H \Psi
+<div class="display-math tex">\[\begin{equation}\label{eqn:schrodinger}
+i \hbar \frac{d}{dt} \Psi = H \Psi 
 \end{equation}\]</div>
-<p><code>Copy-tex</code> is enabled so copying it puts the tex code in your clipboard.</p>
+<p><code>Copy-tex</code> is enabled so copying it puts the tex code in your clipboard. You can also reference the equations as Eq.<span class="math tex">\(\ref{eqn:schrodinger}\)</span>.</p>
 <h2 id="structure"><a href="#structure" class="anchor"></a>Structure</h2>
 <p>The structure of this page will mirror the file system structure
 of the tests. The tests of this package is organized as</p>
@@ -368,9 +394,7 @@ of the tests. The tests of this package is organized as</p>
 ├── quickstart.jl
 └── runtests.jl
 </code></pre>
-<details class="title" style="margin: 1em 0em">
-<summary class="page"><span id="design-theme.jl">Design/theme</span></summary>
-<pre><code class="language-julia">
+<details class="title" style="margin: 1em 0em"><summary class="page"><span id="design-theme.jl">Design/theme</span></summary><pre><code class="language-julia">
 md"""
 You can customize the theme by overwriting `TestToDoc.page_css()`.
 For example, 
@@ -384,7 +408,6 @@ function TestToDoc.page_css()
     }
     """
 end</code><div><p></p><button>copy</button></div></pre></details>
-
 <p>You can customize the theme by overwriting <code>TestToDoc.page_css()</code>.
 For example,</p>
 <pre><code class="language-julia">function TestToDoc.page_css()
@@ -393,10 +416,8 @@ For example,</p>
         color: white;
     }
     """
-end</code><div><p></p><button>copy</button></div></pre>
-<details class="title" style="margin: 1em 0em">
-<summary class="page"><span id="design-dependencies.jl">Design/dependencies</span></summary>
-<pre><code class="language-julia">md"""
+end</code><div><p>test/design/theme.jl</p><button>copy</button></div></pre>
+<details class="title" style="margin: 1em 0em"><summary class="page"><span id="design-dependencies.jl">Design/dependencies</span></summary><pre><code class="language-julia">md"""
 To make a page self-contained, tests can include other tests.
 These includes will be expanded recursively and included
 in the source code. Click on `Design/dependencies` to
@@ -417,12 +438,11 @@ function TestToDoc.page_css()
     }
     """
 end</code><div><p></p><button>copy</button></div></pre></details>
-
 <p>To make a page self-contained, tests can include other tests.
 These includes will be expanded recursively and included
 in the source code. Click on <code>Design/dependencies</code> to
 see how it works.</p>
-<pre><code class="language-julia">include("theme.jl")</code><div><p></p><button>copy</button></div></pre>
+<pre><code class="language-julia">include("theme.jl")</code><div><p>test/design/dependencies.jl</p><button>copy</button></div></pre>
 
     </div>
     </div>

@@ -37,9 +37,18 @@ body {
     scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
 }
 
+a {
+    text-decoration: none;
+    color: rgb(210, 210, 210);
+}
+
+a:hover {
+    color: rgb(214, 0, 28);
+}
+
 .content {
-    max-width: 80em;
-    min-width: 40em;
+    max-width: 40em;
+    min-width: 20em;
     margin: auto;
 }
 
@@ -47,6 +56,8 @@ body {
 p {
     padding: 0px 8px;
 }
+
+
 
 pre div button {
     display: block;
@@ -75,8 +86,9 @@ pre div {
 }
 
 pre p {
-    font-size: 0.6em;
+    /* font-size: 0.6em; */
     margin: 0px;
+    color: rgb(140, 140, 140);
 }
 
 pre {
@@ -90,6 +102,7 @@ pre code.hljs {
     font-size: 12pt;
     font-family: "Geist Mono", monospace;
     scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
+    background-color: rgb(30,30,30);
 }
 
 .page {
@@ -120,17 +133,16 @@ h3 {
 .toc a,
 .toc details summary {
     padding: 2px 6px;
-    font-family: "Geist Mono", monospace;
+    font-family: "Geist", sans-serif;
     font-size: 20px;
     color: rgb(210, 210, 210);
     border-bottom: 2px solid rgb(60, 60, 60);
 }
 .toc details a {
-    padding-left: 24px;
+    padding-left: 20px;
 }
 
 .toc a {
-    text-decoration: none;
     display: block;
 }
 
@@ -164,4 +176,5 @@ table {
     margin: auto;
     border: 1px solid rgb(120, 120, 120);
     border-collapse: collapse;
+    background-color: rgb(30,30,30);
 }

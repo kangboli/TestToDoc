@@ -60,20 +60,23 @@ function make_parser()
     enable!(parser, AttributeRule())
     enable!(parser, AutoIdentifierRule())
     enable!(parser, TableRule())
+    enable!(parser, AdmonitionRule())
+    enable!(parser, RawContentRule())
+    enable!(parser, CitationRule())
     return parser
 end
 
-to_md_string(node::String) = """
-    <pre><code class="language-julia">$(node)</code><div><p></p><button>copy</button></div></pre>
+to_md_string(node::String, name="") = """
+    <pre><code class="language-julia">$(node)</code><div><p>$(name)</p><button>copy</button></div></pre>
     """
-function to_md_string(node::Expr)
+function to_md_string(node::Expr, _="")
     return first(filter(t -> isa(t, String), node.args))
 end
 
 
 function as_html(p::Page)
     parser = make_parser()
-    md_page = join(map(to_md_string, get_nodes(p)), "\n")
+    md_page = join(map(n->to_md_string(n, get_name(p)), get_nodes(p)), "\n")
 
     ast = parser(md_page)
 

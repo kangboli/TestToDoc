@@ -27,13 +27,17 @@ function as_html(d::Documentation, title)
     sources = map(get_source, get_pages(d))
     get_id(title::String) = replace(title, '/' => '-')
 
-    content = join(["""
-        <details class="title" style="margin: 1em 0em">
-        <summary class="page"><span id="$(get_id(t))">$(
-        replace(uppercasefirst(t[1:end-3]), "_"=>" ")
-    )</span></summary>
-        <pre><code class="language-julia">$(s)</code><div><p></p><button>copy</button></div></pre></details>
-        \n$(h)""" for (t, s, h) in zip(titles, sources, htmls)])
+    function page_title(t::String, s, h) 
+        if last(split(t, "/")) == "cover.jl" 
+            h
+        else
+            """<details class="title" style="margin: 1em 0em"><summary class="page"><span id="$(get_id(t))">$(
+                replace(uppercasefirst(t[1:end-3]), "_"=>" ")
+            )</span></summary><pre><code class="language-julia">$(s)</code><div><p></p><button>copy</button></div></pre></details>\n$(h)"""
+        end
+    end
+
+    content = join([page_title(t, s, h) for (t, s, h) in zip(titles, sources, htmls)])
 
     toc_str = ""
     curr_dir = nothing
@@ -74,16 +78,26 @@ function as_html(d::Documentation, title)
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
+<script>
+MathJax = {
+  loader: {load: ['[tex]/physics']},
+
+  tex: {
+    inlineMath: {'[+]': [['\$', '\$']]},
+    tags: 'ams',
+    packages: {'[+]': ['physics']},
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script> 
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/sunburst.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/julia.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/copy-tex.min.js" integrity="sha384-HORx6nWi8j5/mYA+y57/9/CZc5z8HnEw4WUZWy5yOn9ToKBv1l58vJaufFAn9Zzi" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 <style>
     $(page_css())
@@ -147,15 +161,15 @@ function gen_doc!(filepaths::Vector{String}, dst="./docs", title=last(splitdir(p
     close(out)
 end
 
-function watch!(filepaths::Vector{String}, src="./test", dst="./docs", title=last(splitdir(pwd())))
+function watch!(filepaths::Vector{String}; src="./test", dst="./docs", title=last(splitdir(pwd())), port=8080)
     gen_doc!(filepaths, dst, title)
     try
         @sync begin
             Threads.@spawn while true
                 watch_folder((event) -> gen_doc!(filepaths, dst, title), src)
             end
-            Threads.@spawn serve(dir=dst, port=8080)
-            println("http://localhost:8080/index.html")
+            Threads.@spawn serve(dir=dst, port=port)
+            println("http://localhost:$(port)/index.html")
         end
     catch ex
         isa(ex, InterruptException) && println("I'm done; you've been great; bye.")

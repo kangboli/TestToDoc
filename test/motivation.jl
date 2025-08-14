@@ -24,5 +24,4 @@ really fit the bill for our purposes.
 | self-contained tutorial |  $\checkmark$    | $\times$|  $\checkmark$ |
 | navigatable documentation | $\times$ | $\checkmark$ | $\checkmark$ |
 | avoid constraining tests | $\times$ | $\times$ | $\checkmark$ |
-
 """

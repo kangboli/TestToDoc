@@ -32,12 +32,12 @@ Julia code will be converted to code blocks.
 Math is supported by `KaTeX`. For example
 
 $$
-\begin{equation}
-i \hbar \frac{d}{dt} \Psi = H \Psi
+\begin{equation}\label{eqn:schrodinger}
+i \hbar \frac{d}{dt} \Psi = H \Psi 
 \end{equation}
 $$
 
-`Copy-tex` is enabled so copying it puts the tex code in your clipboard.
+`Copy-tex` is enabled so copying it puts the tex code in your clipboard. You can also reference the equations as Eq.$\ref{eqn:schrodinger}$.
 
 ## Structure
 
