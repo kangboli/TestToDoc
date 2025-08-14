@@ -102,13 +102,14 @@ pre code.hljs {
     font-size: 12pt;
     font-family: "Geist Mono", monospace;
     scrollbar-color: rgb(160, 160, 160) rgb(30, 30, 30);
-    background-color: rgb(30,30,30);
+    background-color: rgb(15,15,15);
 }
 
 .page {
     font-size: 1.6em;
     font-family: "Geist Mono", monospace;
     padding: 2px 8px;
+    margin-top: 3em;
 }
 
 .page:hover {
@@ -120,6 +121,7 @@ h3 {
     font-size: 1em;
     font-weight: normal;
     padding: 2px 8px;
+    margin-top: 3em;
 }
 
 h2 {
@@ -176,5 +178,5 @@ table {
     margin: auto;
     border: 1px solid rgb(120, 120, 120);
     border-collapse: collapse;
-    background-color: rgb(30,30,30);
+    /* background-color: rgb(30,30,30); */
 }
