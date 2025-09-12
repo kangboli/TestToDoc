@@ -1,4 +1,4 @@
-export load_julia_file, as_html
+export load_file, as_html
 
 using CommonMark
 
@@ -11,6 +11,18 @@ end
 get_name(p::Page) = p.name
 get_nodes(p::Page) = p.nodes
 get_source(p::Page) = p.source
+
+function load_file(filename::String)
+    suffix = last(split(filename, "."))
+    if suffix == "jl"
+        return load_julia_file(filename)
+    else suffix == "md"
+        content = join(readlines(filename), "\n")
+        return Page(filename, [
+            Meta.parse("@md_str \"$(content) \"")
+        ], content)
+    end
+end
 
 function load_julia_file(filename::String)
     lines = open(filename) do f
@@ -67,7 +79,7 @@ function make_parser()
 end
 
 to_md_string(node::String, name="") = """
-    <pre><code class="language-julia">$(node)</code><div><p>$(name)</p><button>copy</button></div></pre>
+    <pre><code class="language-julia">$(node)</code><div><p></p><button>copy</button></div></pre>
     """
 function to_md_string(node::Expr, _="")
     return first(filter(t -> isa(t, String), node.args))
@@ -76,7 +88,7 @@ end
 
 function as_html(p::Page)
     parser = make_parser()
-    md_page = join(map(n->to_md_string(n, get_name(p)), get_nodes(p)), "\n")
+    md_page = join(map(n -> to_md_string(n, get_name(p)), get_nodes(p)), "\n")
 
     ast = parser(md_page)
 

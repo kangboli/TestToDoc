@@ -256,6 +256,7 @@ function toggle_sidebar() {
                 
 <a href="#design-theme.jl">theme</a>
 <a href="#design-dependencies.jl">dependencies</a>
+<a href="#example.md">example</a>
 </details>
     </div>
     </aside>
@@ -371,7 +372,7 @@ filepaths = [
     "test/design/theme.jl"
 ]
 
-watch!(filepaths, "./test")</code><div><p>test/quickstart.jl</p><button>copy</button></div></pre>
+watch!(filepaths, "./test")</code><div><p></p><button>copy</button></div></pre>
 <p>The order in which these files are passed
 determines the order they show up the this page.</p>
 <h2 id="syntax"><a href="#syntax" class="anchor"></a>Syntax</h2>
@@ -418,7 +419,7 @@ For example,</p>
         color: white;
     }
     """
-end</code><div><p>test/design/theme.jl</p><button>copy</button></div></pre>
+end</code><div><p></p><button>copy</button></div></pre>
 <details class="title" style="margin: 1em 0em"><summary class="page"><span id="design-dependencies.jl">Design/dependencies</span></summary><pre><code class="language-julia">md"""
 To make a page self-contained, tests can include other tests.
 These includes will be expanded recursively and included
@@ -444,7 +445,12 @@ end</code><div><p></p><button>copy</button></div></pre></details>
 These includes will be expanded recursively and included
 in the source code. Click on <code>Design/dependencies</code> to
 see how it works.</p>
-<pre><code class="language-julia">include("theme.jl")</code><div><p>test/design/dependencies.jl</p><button>copy</button></div></pre>
+<pre><code class="language-julia">include("theme.jl")</code><div><p></p><button>copy</button></div></pre>
+<details class="title" style="margin: 1em 0em"><summary class="page"><span id="example.md">Example</span></summary><pre><code class="language-julia">## Markdown files
+
+Markdown files are also allowed.</code><div><p></p><button>copy</button></div></pre></details>
+<h2 id="markdown-files"><a href="#markdown-files" class="anchor"></a>Markdown files</h2>
+<p>Markdown files are also allowed.</p>
 
     </div>
     </div>

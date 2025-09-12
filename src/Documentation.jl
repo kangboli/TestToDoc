@@ -9,12 +9,12 @@ end
 get_pages(d::Documentation) = d.pages
 
 function load_files(filepaths::Vector{String})
-    pages = map(load_julia_file, filepaths)
+    pages = map(load_file, filepaths)
     return Documentation(pages)
 end
 
 function page_css()
-    css_path = join([split(pathof(TestToDoc), "/")[1:end-1]..., "doc.css"], "/")
+    css_path = joinpath([splitpath(pathof(TestToDoc))[1:end-1]..., "doc.css"])
     css = open(css_path) do f
         join(readlines(f), "\n")
     end
@@ -22,13 +22,13 @@ function page_css()
 end
 
 function as_html(d::Documentation, title)
-    titles = map(t -> join(split(get_name(t), "/")[2:end], "/"), get_pages(d))
+    titles = map(t -> joinpath(splitpath(get_name(t))[2:end]), get_pages(d))
     htmls = map(as_html, get_pages(d))
     sources = map(get_source, get_pages(d))
-    get_id(title::String) = replace(title, '/' => '-')
+    get_id(title::String) = replace(replace(title, '/' => '-'), '\\' => '-')
 
     function page_title(t::String, s, h) 
-        if last(split(t, "/")) == "cover.jl" 
+        if last(splitpath(t)) == "cover.jl" 
             h
         else
             """<details class="title" style="margin: 1em 0em"><summary class="page"><span id="$(get_id(t))">$(
@@ -42,7 +42,7 @@ function as_html(d::Documentation, title)
     toc_str = ""
     curr_dir = nothing
     for t in titles
-        comps = split(t[1:end-3], "/")
+        comps = splitpath(t[1:end-3])
         if length(comps) == 1
             toc_str = """$(toc_str)\n<a href="#$(get_id(t))">$(t[1:end-3])</a>"""
             if curr_dir !== nothing
@@ -155,13 +155,13 @@ function toggle_sidebar() {
 end
 
 
-function gen_doc!(filepaths::Vector{String}, dst="./docs", title=last(splitdir(pwd())))
-    out = open("$(dst)/index.html", "w")
+function gen_doc!(filepaths::Vector{String}, dst="docs", title=last(splitdir(pwd())))
+    out = open(joinpath(dst, "index.html") , "w")
     write(out, as_html(load_files(filepaths), title))
     close(out)
 end
 
-function watch!(filepaths::Vector{String}; src="./test", dst="./docs", title=last(splitdir(pwd())), port=8080)
+function watch!(filepaths::Vector{String}; src="test", dst="docs", title=last(splitdir(pwd())), port=8080)
     gen_doc!(filepaths, dst, title)
     try
         @sync begin
