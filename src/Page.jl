@@ -18,8 +18,9 @@ function load_file(filename::String)
         return load_julia_file(filename)
     else suffix == "md"
         content = join(readlines(filename), "\n")
+        println(Meta.parse("""md\"$(content) \""""))
         return Page(filename, [
-            Meta.parse("@md_str \"$(content) \"")
+            Meta.parse("""md\"$(content) \"""")
         ], content)
     end
 end
